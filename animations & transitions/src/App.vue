@@ -42,22 +42,64 @@
         >
           <div style="width: 300px; height: 100px; background-color: aqua" v-if="load"></div>
         </transition>
+        <hr>
+        <button class="btn btn-primary" @click="switchComponents">Switch Components</button>
+        <br>
+        <br>
+        <transition name="fade" mode="out-in">
+          <component :is="selectedComponent"></component>
+        </transition>
+        <hr>
+        <button class="btn btn-primary" @click="addItem">Add Item</button>
+        <br>
+        <br>
+        <ul class="list-group">
+          <transition-group name="slide">
+            <li
+              class="list-group-item"
+              v-for="(number, index) in numbers"
+              :key="number"
+              @click="deleteItem(index)"
+              style="cursor: pointer"
+            >{{number}}</li>
+          </transition-group>
+        </ul>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Danger from "./Danger.vue";
+import Success from "./Success.vue";
 export default {
   data() {
     return {
       show: false,
       load: true,
       animationType: "slide",
-      elementWidth: 100
+      elementWidth: 100,
+      selectedComponent: "app-danger-component",
+      numbers: [1, 2, 3, 4, 5]
     };
   },
+  components: {
+    appDangerComponent: Danger,
+    appSuccessComponent: Success
+  },
   methods: {
+    addItem() {
+      const num = Math.floor(Math.random() * (10 - 1 + 1) + 1);
+      this.numbers.unshift(num);
+    },
+    deleteItem(index) {
+      this.numbers.splice(index, 1);
+    },
+    switchComponents() {
+      this.selectedComponent === "app-danger-component"
+        ? (this.selectedComponent = "app-success-component")
+        : (this.selectedComponent = "app-danger-component");
+    },
     beforeEnter(el) {
       console.log("beforeEnter");
       this.elementWidth = 100;
@@ -137,6 +179,10 @@ export default {
   animation: slide-out 1s ease-out forwards;
   transition: opacity 1s;
   opacity: 0;
+  position: absolute;
+}
+.slide-move {
+  transition: transform 1s;
 }
 
 @keyframes slide-in {
