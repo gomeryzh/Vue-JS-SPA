@@ -1,11 +1,19 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import VueResource from 'vue-resource';
 import App from './App.vue';
-import { store } from './store/store';
 
+import { store } from './store/store';
 import { routes } from './routes';
 
 Vue.use(VueRouter);
+Vue.use(VueResource);
+Vue.http.options.root = 'https://vue-stock-trader-3a311.firebaseio.com/';
+
+Vue.filter('currency', value => {
+  return '$' + value.toLocaleString();
+});
+
 const router = new VueRouter({
   mode: 'history',
   routes

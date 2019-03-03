@@ -9,10 +9,20 @@
       </div>
       <div class="panel-body">
         <div class="pull-left">
-          <input type="number" placeholder="Quantity" class="form-control" v-model="quantity">
+          <input
+            type="number"
+            placeholder="Quantity"
+            class="form-control"
+            v-model="quantity"
+            :class="{danger: notEnougthFunds}"
+          >
         </div>
         <div class="pull-right">
-          <button class="btn btn-success" @click="buyStock" :disabled="quantity < 1">Buy</button>
+          <button
+            class="btn btn-success"
+            @click="buyStock"
+            :disabled="notEnougthFunds || quantity < 1"
+          >{{notEnougthFunds ? "check Funds" : "Buy"}}</button>
         </div>
       </div>
     </div>
@@ -20,6 +30,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   props: ["stock"],
   data() {
@@ -27,19 +39,28 @@ export default {
       quantity: 0
     };
   },
+  computed: {
+    ...mapGetters(["funds"]),
+    notEnougthFunds() {
+      return this.quantity * this.stock.price > this.funds;
+    }
+  },
   methods: {
     buyStock() {
       const order = {
         stockId: this.stock.id,
-        sotckPrice: this.stock.price,
+        stockPrice: this.stock.price,
         quantity: this.quantity
       };
-      console.log(order);
+      this.$store.dispatch("buyStock", order);
       this.quantity = 0;
     }
   }
 };
 </script>
 
-<style>
+<style scoped>
+.danger {
+  border: 1px solid red;
+}
 </style>
