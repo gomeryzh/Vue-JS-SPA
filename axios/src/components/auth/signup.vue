@@ -51,6 +51,8 @@
 </template>
 
 <script>
+import { required, email } from "vuelidate/lib/validators";
+
 export default {
   data() {
     return {
@@ -62,6 +64,11 @@ export default {
       hobbyInputs: [],
       terms: false
     };
+  },
+  validations: {
+    email() {
+      required, email;
+    }
   },
   methods: {
     onAddHobby() {
