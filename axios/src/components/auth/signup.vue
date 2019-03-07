@@ -51,8 +51,6 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   data() {
     return {
@@ -87,10 +85,7 @@ export default {
         terms: this.terms
       };
       console.log(formData);
-      axios
-        .post("users.json", formData)
-        .then(res => console.log(res))
-        .catch(error => console.log(error));
+      this.$store.dispatch("signup", formData);
     }
   }
 };

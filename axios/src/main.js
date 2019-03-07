@@ -6,7 +6,7 @@ import router from "./router";
 import store from "./store";
 
 axios.defaults.baseURL = "https://axios-40fb5.firebaseio.com/";
-axios.defaults.headers.get["Accepts"] = "custom-applications/json";
+// axios.defaults.headers.get["Accepts"] = "custom-applications/json";
 
 const reqInterceptors = axios.interceptors.request.use(config => {
   console.log("Request interceptos:", config);
